@@ -31,13 +31,13 @@ const login = (req, res, next) => {
 };
 
 const createUser = async (req, res, next) => {
-  const { name, email, password } = req.body;
-
-  if (!email || !password) {
-    return next(new BadRequestError(MESSAGES.BAD_REQUEST));
-  }
-
   try {
+    const { name, email, password } = req.body;
+
+    if (!email || !password) {
+      return next(new BadRequestError(MESSAGES.BAD_REQUEST));
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return next(new ConflictError(MESSAGES.CONFLICT));
@@ -51,6 +51,8 @@ const createUser = async (req, res, next) => {
 
     return res.status(201).json(userToSend);
   } catch (err) {
+    console.error("Registration error:", err);
+
     if (err.code === 11000) {
       return next(new ConflictError(MESSAGES.CONFLICT));
     }

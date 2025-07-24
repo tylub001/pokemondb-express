@@ -8,12 +8,12 @@ const { MONGO_URL } = require("./utils/config");
 const mainRouter = require("./routes/index");
 const errorHandler = require("./middlewares/error-handler");
 const { requestLogger, errorLogger } = require("./middlewares/loggers");
-//const limiter = require("./utils/rateLimiter");
+const limiter = require("./utils/rateLimiter");
 
 const app = express();
 const { PORT = 3002 } = process.env;
 
-app.get("/health", (req, res) => res.send("ok"));
+app.get("/health", (req, res) => res.send("ok!!!"));
 
 mongoose
   .connect(MONGO_URL)
@@ -23,7 +23,7 @@ mongoose
   .catch(console.error);
 
 app.use(cors());
-//app.use(limiter);
+app.use(limiter);
 app.use(express.json());
 app.use(requestLogger);
 app.use(helmet());
